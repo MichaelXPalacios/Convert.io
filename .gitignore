@@ -1,0 +1,28 @@
+# Neon CLI local link + pulled credentials. Never commit either.
+.neon
+.env.local
+.env*.local
+
+node_modules/
+
+# Build output
+dist/
+build/
+.next/
+*.tsbuildinfo
+
+# Terraform: state and anything that can carry credentials
+terraform/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+crash.log
+
+# Audit engine output
+audits/
+
+# Editor and OS
+.DS_Store
+Thumbs.db
+*.log
