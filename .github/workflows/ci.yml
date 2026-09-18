@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# A second push to the same branch makes the first run irrelevant.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: typecheck, lint, test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # pnpm comes from the packageManager field, so the version is pinned by
+      # the repo rather than by this file.
+      - name: Enable corepack
+        run: corepack enable
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      # Credentials live in the environment, never in the tree. This is cheap
+      # and catches the mistake at the only point where it is still cheap.
+      - name: Guard against committed credentials
+        run: |
+          for f in .env.local .neon; do
+            if git ls-files --error-unmatch "$f" >/dev/null 2>&1; then
+              echo "::error file=$f::$f is tracked and holds live credentials"
+              exit 1
+            fi
+          done
+          if git grep -I -n -E 'postgres(ql)?://[^:@/]+:[^@/]+@' -- . ':!.env.example'; then
+            echo "::error::a Postgres URL with an inline password is committed"
+            exit 1
+          fi
+
+      # packages/contracts is a composite project and apps/edge resolves it
+      # through its dist/, so a clean checkout has to build before anything
+      # type-aware runs.
+      - name: Build
+        run: pnpm -r --if-present build
+
+      - name: Typecheck
+        run: pnpm -r --if-present typecheck
+
+      - name: Lint
+        run: pnpm exec eslint .
+
+      - name: Test
+        run: pnpm -r --if-present test
+
+  # Migrations are forward only and checksummed. An edit to an applied file
+  # passes typecheck and lint and then fails at deploy time against a real
+  # database, so it is worth catching on the pull request instead.
+  migrations:
+    name: migrations are forward only
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Refuse edits to existing migrations
+        run: |
+          base="origin/${{ github.base_ref }}"
+          changed=$(git diff --name-only --diff-filter=MD "$base"...HEAD -- 'db/*.sql')
+          if [ -n "$changed" ]; then
+            echo "::error::migrations are forward only; these were modified or deleted:"
+            echo "$changed"
+            echo "Add a new numbered migration instead."
+            exit 1
+          fi
+          echo "No existing migration was modified."

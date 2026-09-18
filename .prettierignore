@@ -1,0 +1,22 @@
+# Generated or vendored. Formatting these produces noise in every diff and
+# fights the tool that wrote them.
+
+node_modules/
+dist/
+build/
+*.tsbuildinfo
+
+# Lockfiles are written by the package manager.
+pnpm-lock.yaml
+package-lock.json
+
+# Written by `neon skills`; regenerated on every run.
+.claude/skills/
+skills-lock.json
+
+# Neon local link and pulled credentials.
+.neon
+.env.local
+
+# Audit engine output.
+audits/
