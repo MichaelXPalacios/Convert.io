@@ -27,6 +27,16 @@ export default tseslint.config(
   {
     // Scripts and tooling run on Node and legitimately write to stdout.
     files: ["db/**/*.mjs", "tools/**/*.ts", "**/*.config.js"],
+    languageOptions: {
+      globals: {
+        process: "readonly",
+        console: "readonly",
+        Buffer: "readonly",
+        URL: "readonly",
+        __dirname: "readonly",
+        __filename: "readonly",
+      },
+    },
     rules: { "no-console": "off" },
   },
 );
