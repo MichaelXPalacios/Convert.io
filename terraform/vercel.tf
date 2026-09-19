@@ -11,6 +11,29 @@ resource "vercel_project" "app" {
     repo = var.github_repo
   }
 
+  # The Next app is not at the repository root, and the default build cannot
+  # work here: `pnpm install` does not build workspace packages, and both
+  # @convertio/contracts and @convertio/core resolve through their dist/, so a
+  # bare `next build` fails on "Module not found" for each of them.
+  #
+  # The `...` in the filter is load-bearing: it selects the package AND its
+  # workspace dependencies, building them in topological order first.
+  root_directory = "apps/edge"
+  build_command  = "cd ../.. && pnpm --filter @convertio/edge... build"
+
+  # pnpm walks up to pnpm-workspace.yaml, so this installs the whole workspace
+  # even though it runs from apps/edge. --frozen-lockfile so a stale lockfile
+  # fails the deploy instead of silently resolving differently than CI did.
+  install_command = "pnpm install --frozen-lockfile"
+
+  # Root package.json requires >=22.
+  node_version = "22.x"
+
+  # With root_directory set, Vercel skips builds for pushes that do not touch
+  # that directory. That is wrong here: a change to packages/core or
+  # packages/contracts must redeploy. Exit 1 means "do not skip".
+  ignore_command = "exit 1"
+
   # A push to a non-production branch should not be able to write to the
   # production database, and a preview deployment of a bandit is a live
   # experiment. Previews stay off until there is a preview Neon branch to
