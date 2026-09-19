@@ -26,7 +26,13 @@ export default tseslint.config(
   },
   {
     // Scripts and tooling run on Node and legitimately write to stdout.
-    files: ["db/**/*.mjs", ".github/scripts/**/*.mjs", "tools/**/*.ts", "**/*.config.js"],
+    files: [
+      "db/**/*.mjs",
+      ".github/scripts/**/*.mjs",
+      "tools/**/*.ts",
+      "**/*.config.js",
+      "**/*.config.mjs",
+    ],
     languageOptions: {
       globals: {
         process: "readonly",
