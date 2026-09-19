@@ -59,6 +59,14 @@ make apply                                     # terraform apply
 `terraform.tfvars` is gitignored. In CI, set `TF_VAR_*` environment variables
 instead of writing the file.
 
+An empty `shopify_webhook_secret` or `stripe_webhook_secret` is a **working**
+configuration, not a broken one, and that is the trap. The order webhook
+treats an unset secret as "this provider is disabled" rather than "skip
+verification" — which is the right call, since the alternative is accepting
+unverifiable orders. But the result is a deployment that comes up healthy and
+silently records no revenue from that provider. If conversions are missing for
+one provider and nothing is erroring, check these two first.
+
 Two variables are validated rather than trusted:
 
 - `database_url` must be the **pooled** Neon string, the one containing

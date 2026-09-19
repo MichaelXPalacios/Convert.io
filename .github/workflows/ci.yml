@@ -154,3 +154,30 @@ jobs:
 
       - name: Recompute against real Postgres
         run: node .github/scripts/worker-integration.mjs
+
+      # The recompute check writes exposures and conversions with hand-written
+      # INSERTs, which leaves the modules the request path actually calls
+      # untested against a real database. This drives the whole chain —
+      # recordExposure, recordEvent, attributeOrder, recordConversion, then the
+      # recompute — and checks the revenue lands on the arm that earned it.
+      #
+      # A separate database from the step above, because it asserts exact
+      # counts and the synthetic traffic there would swamp them.
+      - name: Create a clean database for the loop check
+        run: |
+          node -e '
+            const pg = require("pg");
+            const c = new pg.Client({ connectionString: process.env.DATABASE_URL_UNPOOLED });
+            c.connect()
+              .then(() => c.query("CREATE DATABASE loop_check"))
+              .then(() => c.end())
+              .catch((e) => { console.error(e.message); process.exit(1); });
+          '
+
+      - name: The revenue loop, end to end
+        env:
+          DATABASE_URL_UNPOOLED: postgres://postgres:postgres@localhost:5432/loop_check
+        run: |
+          node db/migrate.mjs
+          node db/seed.mjs
+          node .github/scripts/loop-integration.mjs
