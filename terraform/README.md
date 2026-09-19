@@ -26,27 +26,31 @@ Does not own the cron schedule either. Vercel reads schedules from
 `vercel.json` at the repository root, which keeps the schedule next to the
 route it invokes rather than in a plan the application developer never runs.
 
-## The Vercel project already exists
+## The first apply creates the project
 
-It was created by hand before any of this was applied, so Terraform has never
-seen it. A plain `apply` would try to **create** a project that exists and
-fail on the name, and if it somehow succeeded you would have two.
+No Vercel project exists yet. Checked against the live API with a working
+token on 2026-09-19: authenticated as the account owner, zero teams, zero
+projects in personal scope, and `GET /v9/projects/convertio` returning 404.
 
-Import it before the first apply, and read the plan afterwards rather than
-accepting it:
+So there is nothing to import, and `terraform import` would fail with nothing
+to bind to. The first `apply` is a **create**.
 
-```sh
-terraform import vercel_project.app <project-id-or-name>
-terraform plan
-```
+That makes this configuration a specification rather than a diff. Everything
+`vercel.tf` sets — `root_directory`, `build_command`, `install_command`,
+`node_version`, `ignore_command` — is what the project will be, not what it
+will be reconciled toward. Read it as such before the first apply, because a
+default Vercel build cannot work for this repository: `pnpm install` does not
+build workspace packages, and `@convertio/contracts` and `@convertio/core`
+both resolve through their `dist/`.
 
-Expect that first plan to show changes, because the hand-made project will not
-match this configuration — `root_directory`, `build_command`, `node_version`
-and `ignore_command` in particular. Those are the settings a default Vercel
-build gets wrong here, so the plan converging on them is the point. What it
-must **not** show is a change to any `KV_REST_API_*` variable; if it does,
-something has reintroduced Upstash into this configuration and applying it
-would break the mirror.
+One consequence worth knowing before you run it. Any webhook secret set in
+`terraform.tfvars` becomes a real deployed value on creation, which flips that
+provider from disabled to live in the same moment the project appears. See the
+note below on what an empty secret means.
+
+If the project turns out to exist under a different Vercel account than the
+token's, none of the above holds — import it first, and expect that plan to
+converge the build settings above.
 
 ## Running it
 
