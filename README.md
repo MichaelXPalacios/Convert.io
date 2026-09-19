@@ -71,12 +71,47 @@ pass `--force`. Seed traffic becomes exposures and posteriors that the request
 path reads and acts on, and deleting the rows afterwards does not undo the
 allocations they already produced.
 
+### Branches
+
+| Branch        | What it is                                                         |
+| ------------- | ------------------------------------------------------------------ |
+| `production`  | The default branch. Real visitors, real orders. Never seeded.      |
+| `development` | Branched from production. Carries the seed; point local work here. |
+
+`development` is what `.env.local` should address. Pointing local work at
+production is not a smaller version of the same thing: the request path reads
+posteriors and writes exposures, so a `pnpm dev` against production is a live
+experiment with an audience of one.
+
+Ephemeral branches — one per pull request, per experiment, per developer — are
+policy rather than ceremony. `neon.ts` gives anything named `preview/*`,
+`pr-*` or `dev-*` a parent of `development`, a seven-day expiry and a 1 CU
+ceiling, so a branch created by `neon checkout preview/my-feature` is born
+cheap and cleans itself up.
+
+They are parented on `development` rather than `production` deliberately. A
+preview deployment of a bandit is a live experiment; copying production rows
+into a branch it will write exposures into mixes demo traffic with revenue
+data that cannot be un-mixed afterwards. When you want production-shaped data
+— testing a migration against real row volumes — create that branch
+explicitly and delete it when you are done:
+
+```sh
+neon branches create --name migration-test --parent production \
+  --expires-at <iso8601>
+```
+
+The policy only applies to branches that do not exist yet; `production` and
+`development` were created by hand and are managed by hand. `neon config plan`
+shows what `neon deploy` would change, and against both of them it shows
+nothing, by design.
+
 ## Who owns what
 
-Neon belongs to the Neon CLI and `neon.ts`, **not** to Terraform. Terraform
-owns the Vercel project, its environment variables, and the Upstash database.
-One system per resource, so a plan nobody read carefully cannot destroy a
-branch.
+Neon belongs to the Neon CLI and `neon.ts` — the project, its branches, and
+their compute profile — **not** to Terraform. Terraform owns the Vercel
+project, its environment variables, and the Upstash database. One system per
+resource, so a plan nobody read carefully cannot destroy a branch.
 
 Cron schedules live in `vercel.json` rather than Terraform, because Vercel
 reads them from the repository. Vercel Cron issues **GET**, not POST — the
