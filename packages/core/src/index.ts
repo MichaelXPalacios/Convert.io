@@ -18,3 +18,4 @@ export * from "./assign.js";
 export * from "./mirror.js";
 export * from "./identity.js";
 export * from "./select.js";
+export * from "./exposure.js";
