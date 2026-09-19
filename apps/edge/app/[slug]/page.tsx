@@ -18,6 +18,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { ArmPage } from "../../components/ArmPage";
+import { TrackBeacon } from "../../components/TrackBeacon";
 import { hasContentFor, loadArmContent } from "../../lib/content";
 import { ARM_HEADER } from "../../lib/headers";
 
@@ -73,5 +74,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const content = await resolveContent(slug);
   if (content === undefined) notFound();
 
-  return <ArmPage content={content} />;
+  // The beacon records the exposure. It renders nothing, and it is mounted
+  // beside the page rather than inside ArmPage so that an arm's content cannot
+  // accidentally drop the one thing that makes the arm measurable.
+  return (
+    <>
+      <ArmPage content={content} />
+      <TrackBeacon slug={slug} />
+    </>
+  );
 }
