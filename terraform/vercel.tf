@@ -58,11 +58,20 @@ resource "vercel_project" "app" {
 
 locals {
   # Values that must exist for the deployment to function at all.
+  #
+  # The Upstash credentials are NOT here, and must not be added. The database
+  # is provisioned through the Vercel Marketplace, which injects
+  # KV_REST_API_URL and KV_REST_API_TOKEN into the project itself.
+  #
+  # Setting UPSTASH_REDIS_REST_URL here would not merely duplicate them, it
+  # would override them: packages/core reads URL_VARS in order and
+  # UPSTASH_REDIS_REST_URL is checked before KV_REST_API_URL. Pointing that
+  # name at a different database gives the request path an empty mirror, which
+  # fails by serving the control arm to everyone forever rather than by
+  # raising anything.
   required_env = {
-    DATABASE_URL             = var.database_url
-    UPSTASH_REDIS_REST_URL   = "https://${upstash_redis_database.mirror.endpoint}"
-    UPSTASH_REDIS_REST_TOKEN = upstash_redis_database.mirror.rest_token
-    CRON_SECRET              = var.cron_secret
+    DATABASE_URL = var.database_url
+    CRON_SECRET  = var.cron_secret
   }
 
   # Values that switch a capability on. An unset one disables its feature

@@ -17,16 +17,9 @@ variable "vercel_team_id" {
   default     = null
 }
 
-variable "upstash_email" {
-  description = "Email of the Upstash account."
-  type        = string
-}
-
-variable "upstash_api_key" {
-  description = "Upstash management API key."
-  type        = string
-  sensitive   = true
-}
+# Upstash takes no variables here. The database comes from the Vercel
+# Marketplace integration, which injects KV_REST_API_URL and KV_REST_API_TOKEN
+# into the project. Terraform neither creates it nor names its credentials.
 
 # ---------------------------------------------------------------------------
 # Project shape
@@ -48,12 +41,6 @@ variable "production_domain" {
   description = "Custom production domain. Null leaves the project on its vercel.app domain."
   type        = string
   default     = null
-}
-
-variable "upstash_region" {
-  description = "Upstash primary region. Keep it next to the Neon project, which is aws-us-east-2."
-  type        = string
-  default     = "us-east-1"
 }
 
 # ---------------------------------------------------------------------------
