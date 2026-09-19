@@ -106,6 +106,46 @@ The policy only applies to branches that do not exist yet; `production` and
 shows what `neon deploy` would change, and against both of them it shows
 nothing, by design.
 
+## The HTTP boundary
+
+Every route is defined once in `packages/contracts/src/wire.ts` and parses its
+input with that schema. A route accepting a shape defined anywhere else is
+outside the contract.
+
+| Route                | Method | What it does                                             |
+| -------------------- | ------ | -------------------------------------------------------- |
+| `/api/track`         | POST   | Records an exposure. The denominator of every posterior. |
+| `/api/event`         | POST   | Engagement. Diagnostic only; never reaches a posterior.  |
+| `/api/webhook/order` | POST   | Shopify and Stripe orders. Where revenue enters.         |
+| `/api/cron/worker`   | GET    | Recomputes posteriors and publishes the mirror.          |
+
+Three rules hold across them, and each exists because the alternative fails
+quietly rather than loudly.
+
+**Identity is never taken from a request body.** `/api/track` reads the
+visitor, session and arm from the proxy's HttpOnly cookies, and fills the user
+agent, device and country from request headers, even though `TrackRequest`
+names all of them. They are the idempotency key and the attribution key at
+once, so a caller who can name its own `visitorId` can mint exposures for an
+arm it was never shown — and the only symptom is a posterior that stops
+matching reality.
+
+**Signatures are verified against the raw body, before parsing.**
+`JSON.parse` followed by `JSON.stringify` does not round-trip, so a signature
+checked against re-serialized bytes verifies something the sender never sent.
+An unset provider secret disables that provider rather than trusting it.
+
+**Writes that a caller may retry are idempotent.** Exposures on
+(visitor, session, arm), conversions on (provider, external order id). Payment
+providers redeliver, beacons double-fire, and cron overlaps; none of those may
+count twice.
+
+One known bias, recorded because it is invisible at the call site: exposures
+depend on client JavaScript running, so ad blockers and pre-hydration bounces
+lose some, and not uniformly across arms. It is partly self-cancelling — a
+conversion whose exposure is missing attributes to nothing either — and worth
+watching the loss rate once there is real traffic.
+
 ## Who owns what
 
 Neon belongs to the Neon CLI and `neon.ts` — the project, its branches, and
