@@ -16,3 +16,14 @@ export {
   type QueryResultLike,
   type RecomputeDeps,
 } from "./recompute.js";
+
+export {
+  createUpstashMirrorPublisher,
+  mirrorPublisherFromEnv,
+  PUBLISH_TIMEOUT_MS,
+  type MirrorPublisher,
+  type MirrorPublisherOptions,
+  type PublishTarget,
+} from "./publish.js";
+
+export type { FetchLike } from "./http.js";
