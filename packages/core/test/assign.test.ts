@@ -12,8 +12,8 @@ import {
   controlArm,
   effectiveExplorationFloor,
   eligibleArms,
-} from "../lib/assign.js";
-import { mulberry32 } from "../lib/bandit.js";
+} from "../src/assign.js";
+import { mulberry32 } from "../src/bandit.js";
 
 const EXPERIMENT_ID = "00000000-0000-4000-8000-000000000001";
 const armId = (n: number) => `00000000-0000-4000-8000-00000000010${n}`;

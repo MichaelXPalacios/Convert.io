@@ -7,8 +7,8 @@ import {
   serializePosteriorMirror,
 } from "@convertio/contracts";
 import type { MirrorArm, PosteriorMirror } from "@convertio/contracts";
-import { createUpstashMirrorStore, mirrorStoreFromEnv } from "../lib/mirror.js";
-import type { FetchLike } from "../lib/mirror.js";
+import { createUpstashMirrorStore, mirrorStoreFromEnv } from "../src/mirror.js";
+import type { FetchLike } from "../src/mirror.js";
 
 const EXPERIMENT_ID = "00000000-0000-4000-8000-000000000001";
 const ARM_ID = "00000000-0000-4000-8000-000000000002";

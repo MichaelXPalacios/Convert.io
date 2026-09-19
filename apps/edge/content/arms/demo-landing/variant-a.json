@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "key": "variant-a",
+  "meta": {
+    "title": "Convert.io — stop optimizing for clicks",
+    "description": "Your A/B tool is scoring clicks. We score revenue per visitor, and the difference is the money you are leaving on the table."
+  },
+  "hero": {
+    "headline": "Your A/B test is measuring the wrong thing",
+    "lede": "Clicks go up, orders go flat, and the dashboard calls it a win. We score every variant on revenue per visitor instead.",
+    "cta": { "label": "Show me what I am losing", "href": "#audit", "style": "solid" }
+  },
+  "sections": [
+    {
+      "kind": "compare",
+      "heading": "Same test, two scorers",
+      "sub": "One of these ships the losing page.",
+      "panes": [
+        {
+          "title": "Scored on clicks",
+          "body": "The bold headline wins. It pulls 18% more clicks from the same spend.",
+          "caption": "Declared a winner on day three.",
+          "bars": [
+            { "height": 62, "tone": "muted" },
+            { "height": 88, "tone": "live" }
+          ]
+        },
+        {
+          "title": "Scored on revenue per visitor",
+          "body": "The same headline brings worse-qualified traffic. Orders per visitor fall, and so does the money.",
+          "caption": "Rolled back before it shipped.",
+          "bars": [
+            { "height": 74, "tone": "win" },
+            { "height": 41, "tone": "muted" }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "finding",
+      "heading": "What a finding looks like",
+      "label": "Sample finding",
+      "impactScore": 78,
+      "area": "Offer clarity",
+      "effort": "S",
+      "now": "The price appears once, below the fold, after four paragraphs of positioning.",
+      "why": "A visitor deciding whether to start cannot find the number that decides it, so the ones who would have paid leave to go compare.",
+      "change": "Move price and what it includes directly under the hero, above the fold.",
+      "expected": "Fewer, better-qualified starts, and a higher order rate among them."
+    },
+    {
+      "kind": "form",
+      "heading": "Audit your page",
+      "sub": "One URL. Findings ranked by impact per effort, with the evidence attached.",
+      "fields": [
+        {
+          "name": "url",
+          "type": "url",
+          "label": "Landing page URL",
+          "placeholder": "https://",
+          "required": true
+        },
+        {
+          "name": "email",
+          "type": "email",
+          "label": "Where to send it",
+          "placeholder": "you@company.com",
+          "required": true
+        }
+      ],
+      "submitLabel": "Send me the audit",
+      "fineprint": "No account required."
+    }
+  ],
+  "footer": { "brand": "Convert.io", "tagline": "Measured against revenue, not clicks." }
+}
