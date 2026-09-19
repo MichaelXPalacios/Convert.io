@@ -1,0 +1,66 @@
+name: Terraform
+
+# Infrastructure is the one part of this repo where a mistake is expensive and
+# slow to notice, and it is the part CI was not checking. `terraform validate`
+# resolves every attribute against the real provider schema without needing a
+# single credential, which is how the node_version bug was found by hand — it
+# must be "22.x", and "22" is rejected. That check belongs here, not in
+# whoever remembers to run it.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "terraform/**"
+      - ".github/workflows/terraform.yml"
+  pull_request:
+    paths:
+      - "terraform/**"
+      - ".github/workflows/terraform.yml"
+
+concurrency:
+  group: terraform-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: fmt and validate
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: terraform
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.16.3"
+          # The wrapper rewrites stdout, which turns a clean failure into a
+          # confusing one.
+          terraform_wrapper: false
+
+      - name: Format
+        run: terraform fmt -check -recursive
+
+      # -backend=false because there is no state to reach and no credentials
+      # here. Providers still download, which is the whole point: their schemas
+      # are what validate checks against.
+      #
+      # This needs linux_amd64 hashes in .terraform.lock.hcl. They are
+      # committed alongside the windows ones; if this step fails on a missing
+      # checksum, run:
+      #   terraform providers lock -platform=linux_amd64 -platform=windows_amd64
+      - name: Init
+        run: terraform init -backend=false
+
+      - name: Validate
+        run: terraform validate -no-color
+
+      # A plan needs real credentials and would reach the Vercel and Upstash
+      # APIs, so it is deliberately not run here. Validation catches the class
+      # of error that has actually bitten us: wrong attribute names and values.

@@ -5,6 +5,7 @@ provider "registry.terraform.io/upstash/upstash" {
   version     = "1.5.3"
   constraints = "~> 1.5"
   hashes = [
+    "h1:LmeraI6X6FjPc+CwWpU5sV3C50k7q0BLJU44T39R81U=",
     "h1:sLYNR2A0QEfGHB9qtfY9tEFtodL3nXoYacQV/c7eNrs=",
     "zh:109bbfca01acc2887a2ccce09036b21c1837cb04f843dd6d8eb93fd1392409d0",
     "zh:279a6313ce37de51ba926fd0bf890127671b726df9328c2d29b86a99ed4df39b",
@@ -27,6 +28,7 @@ provider "registry.terraform.io/vercel/vercel" {
   version     = "3.17.0"
   constraints = "~> 3.0"
   hashes = [
+    "h1:MVKctNUn0vqI9ZkaLak5zLToLmqZVHcqOuOzBJJMpR0=",
     "h1:kz+XLb2r+wlZRi/xkJ6cDnHvzzSTqnIlg25N4SmBtwE=",
     "zh:017ee9b1ac5716640091454d3e503a4343891052eada00c99a3fb9673a8b455e",
     "zh:0d1320bbb86c596b1f9883dd77c7b88dff862ea35fa23e3a1e873428f85a5c52",
