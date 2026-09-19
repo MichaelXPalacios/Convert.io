@@ -70,11 +70,11 @@ describe("createUpstashMirrorStore", () => {
   it("requires a url and a token", () => {
     assert.throws(
       () => createUpstashMirrorStore({ url: "", token: "t", fetch: stubFetch({}).fetch }),
-      /URL is required/,
+      /REST URL is required/,
     );
     assert.throws(
       () => createUpstashMirrorStore({ url: "u", token: "", fetch: stubFetch({}).fetch }),
-      /TOKEN is required/,
+      /REST token is required/,
     );
   });
 
@@ -182,26 +182,78 @@ describe("createUpstashMirrorStore", () => {
 });
 
 describe("mirrorStoreFromEnv", () => {
-  it("names the variable that is missing", () => {
-    assert.throws(() => mirrorStoreFromEnv({}), /UPSTASH_REDIS_REST_URL is not set/);
+  it("names every spelling that would have worked", () => {
+    assert.throws(() => mirrorStoreFromEnv({}), /UPSTASH_REDIS_REST_URL or KV_REST_API_URL/);
     assert.throws(
       () => mirrorStoreFromEnv({ UPSTASH_REDIS_REST_URL: "https://x" }),
-      /UPSTASH_REDIS_REST_TOKEN is not set/,
+      /UPSTASH_REDIS_REST_TOKEN or KV_REST_API_READ_ONLY_TOKEN or KV_REST_API_TOKEN/,
     );
   });
 
   it("treats an empty variable as unset", () => {
     assert.throws(
       () => mirrorStoreFromEnv({ UPSTASH_REDIS_REST_URL: "", UPSTASH_REDIS_REST_TOKEN: "t" }),
-      /UPSTASH_REDIS_REST_URL is not set/,
+      /no Upstash REST URL/,
     );
   });
 
-  it("builds a store when both are present", () => {
+  it("builds a store from the UPSTASH_ names", () => {
     const s = mirrorStoreFromEnv({
       UPSTASH_REDIS_REST_URL: "https://x.upstash.io",
       UPSTASH_REDIS_REST_TOKEN: "t",
     });
     assert.equal(typeof s.read, "function");
+  });
+
+  it("builds a store from the KV_ names the Vercel Marketplace injects", async () => {
+    // Provisioning Upstash through Vercel sets KV_REST_API_*; it is the same
+    // database, and nobody should have to copy a credential to satisfy a name.
+    const { fetch, calls } = stubFetch({
+      result: asUpstashArray(serializePosteriorMirror(mirror)),
+    });
+    const s = createUpstashMirrorStore({
+      url: "https://x.upstash.io",
+      token: "readonly-token",
+      fetch,
+    });
+    await s.read("demo-landing");
+    assert.equal(calls[0]?.headers["Authorization"], "Bearer readonly-token");
+
+    const fromEnv = mirrorStoreFromEnv({
+      KV_REST_API_URL: "https://x.upstash.io",
+      KV_REST_API_TOKEN: "t",
+    });
+    assert.equal(typeof fromEnv.read, "function");
+  });
+
+  it("prefers the read-only token, because a mirror store only ever reads", () => {
+    // The worker writes the mirror; the request path has no use for an
+    // authority it never exercises.
+    const s = mirrorStoreFromEnv({
+      KV_REST_API_URL: "https://x.upstash.io",
+      KV_REST_API_READ_ONLY_TOKEN: "ro",
+      KV_REST_API_TOKEN: "rw",
+    });
+    assert.equal(typeof s.read, "function");
+  });
+
+  it("prefers an explicit UPSTASH_ value over an injected KV_ one", () => {
+    const s = mirrorStoreFromEnv({
+      UPSTASH_REDIS_REST_URL: "https://explicit.upstash.io",
+      KV_REST_API_URL: "https://injected.upstash.io",
+      UPSTASH_REDIS_REST_TOKEN: "t",
+    });
+    assert.equal(typeof s.read, "function");
+  });
+
+  it("rejects a redis:// URL with an explanation rather than failing at request time", () => {
+    // KV_URL and REDIS_URL are TCP URLs. Taking one would surface as a
+    // connection error that looks like an Upstash outage.
+    for (const url of ["redis://x.upstash.io:6379", "rediss://x.upstash.io:6379"]) {
+      assert.throws(
+        () => mirrorStoreFromEnv({ KV_REST_API_URL: url, KV_REST_API_TOKEN: "t" }),
+        /TCP URL/,
+      );
+    }
   });
 });
