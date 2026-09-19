@@ -28,7 +28,10 @@ ${a.findings.map((f, i) => findingBlock(f, i + 1)).join("\n\n")}
 | Check | Result | Detail |
 | --- | --- | --- |
 ${facts.signals
-  .map((s) => `| ${s.label} | ${s.status === "pass" ? "pass" : s.status === "warn" ? "warn" : "fail"} | ${s.detail.replace(/\|/g, "/")} |`)
+  .map(
+    (s) =>
+      `| ${s.label} | ${s.status === "pass" ? "pass" : s.status === "warn" ? "warn" : "fail"} | ${s.detail.replace(/\|/g, "/")} |`,
+  )
   .join("\n")}
 
 ## What we would test first
@@ -83,7 +86,9 @@ ${fs
   .join("\n\n")}
 `;
 
-  const s = [...armable].sort((a2, b) => b.impactScore / effortWeight(b.effort) - a2.impactScore / effortWeight(a2.effort));
+  const s = [...armable].sort(
+    (a2, b) => b.impactScore / effortWeight(b.effort) - a2.impactScore / effortWeight(a2.effort),
+  );
   const wave1 = s.filter((f) => f.effort === "S").slice(0, 3);
   const wave2 = s.filter((f) => f.effort === "M").slice(0, 3);
   const wave3 = s.filter((f) => f.effort === "L");
@@ -107,12 +112,14 @@ Exit criteria: a test purchase or lead appears in the dashboard attributed to th
 ${wave(wave1, "Wave 1: copy and layout", "week 1")}
 ${wave(wave2, "Wave 2: structural", "weeks 2 to 3")}
 ${wave(wave3, "Wave 3: heavier changes", "week 4 onward")}
-${engineering.length
-      ? `### Engineering track (parallel, not variant tested)
+${
+  engineering.length
+    ? `### Engineering track (parallel, not variant tested)
 
 ${engineering.map((f) => `- **${f.title}**: ${f.suggested} (${f.effort})`).join("\n")}
 `
-      : ""}
+    : ""
+}
 ## How allocation works
 
 Variants run simultaneously. Traffic is allocated by Thompson sampling on revenue per visitor, with a 10 percent exploration floor so nothing starves and a minimum of 1,000 exposures per arm before any arm can be promoted or retired. If a promoted variant regresses below the control's lower credible bound, it is paused automatically and logged with the reason.

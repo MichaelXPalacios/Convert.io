@@ -78,7 +78,10 @@ export function normalizeReward(valueCents: number, rewardCapCents: number): num
  * the uniform prior: before any data, every arm is equally plausible rather
  * than assumed good.
  */
-export function betaFromRewards(exposures: number, rewardSum: number): { alpha: number; beta: number } {
+export function betaFromRewards(
+  exposures: number,
+  rewardSum: number,
+): { alpha: number; beta: number } {
   const n = Math.max(0, exposures);
   const s = Math.min(Math.max(0, rewardSum), n);
   return { alpha: 1 + s, beta: 1 + (n - s) };
@@ -94,7 +97,11 @@ export const betaMean = (alpha: number, beta: number): number => alpha / (alpha 
  * that the interval is wide enough that no promotion decision should be reading
  * it anyway, which is exactly why the minimum exists.
  */
-export function betaCredibleInterval(alpha: number, beta: number, z = 1.96): { low: number; high: number } {
+export function betaCredibleInterval(
+  alpha: number,
+  beta: number,
+  z = 1.96,
+): { low: number; high: number } {
   const mean = betaMean(alpha, beta);
   const n = alpha + beta;
   const sd = Math.sqrt((alpha * beta) / (n * n * (n + 1)));

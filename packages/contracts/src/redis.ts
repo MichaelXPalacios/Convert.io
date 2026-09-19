@@ -21,8 +21,7 @@ export const REDIS_POSTERIOR_KEY_PREFIX = "cv:post:v1";
 export const REDIS_MIRROR_META_FIELD = "__meta";
 
 /** `cv:post:v1:<slug>` */
-export const redisPosteriorKey = (slug: string): string =>
-  `${REDIS_POSTERIOR_KEY_PREFIX}:${slug}`;
+export const redisPosteriorKey = (slug: string): string => `${REDIS_POSTERIOR_KEY_PREFIX}:${slug}`;
 
 /** One field of the hash: everything the edge needs to sample one arm. */
 export const MirrorArmSchema = z.object({

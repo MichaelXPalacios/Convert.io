@@ -16,7 +16,9 @@ const { values } = parseArgs({
 });
 
 if (!values.url) {
-  console.error("usage: convertio-audit --url https://example.com [--context \"b2c skincare, meta traffic\"]");
+  console.error(
+    'usage: convertio-audit --url https://example.com [--context "b2c skincare, meta traffic"]',
+  );
   process.exit(1);
 }
 
@@ -56,8 +58,12 @@ async function main() {
   if (values.json) {
     process.stdout.write(JSON.stringify(analysis, null, 2));
   } else {
-    process.stderr.write(`\nwrote ${dir}/\n  review.md\n  implementation-plan.md\n  outreach.txt\n  raw.json\n\n`);
-    process.stderr.write(`top finding: ${analysis.findings[0].title} (${analysis.findings[0].impactScore}/100)\n`);
+    process.stderr.write(
+      `\nwrote ${dir}/\n  review.md\n  implementation-plan.md\n  outreach.txt\n  raw.json\n\n`,
+    );
+    process.stderr.write(
+      `top finding: ${analysis.findings[0].title} (${analysis.findings[0].impactScore}/100)\n`,
+    );
   }
 }
 

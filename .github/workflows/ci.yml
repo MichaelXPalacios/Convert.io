@@ -61,6 +61,9 @@ jobs:
       - name: Lint
         run: pnpm exec eslint .
 
+      - name: Format
+        run: pnpm exec prettier --check .
+
       - name: Test
         run: pnpm -r --if-present test
 

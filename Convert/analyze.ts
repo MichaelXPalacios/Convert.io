@@ -110,6 +110,8 @@ Return between 5 and 9 findings, sorted by impactScore descending.`;
     parsed.findings.sort((a, b) => b.impactScore - a.impactScore);
     return parsed;
   } catch (err) {
-    throw new Error(`Model did not return parseable JSON: ${(err as Error).message}\n\n${text.slice(0, 500)}`);
+    throw new Error(
+      `Model did not return parseable JSON: ${(err as Error).message}\n\n${text.slice(0, 500)}`,
+    );
   }
 }

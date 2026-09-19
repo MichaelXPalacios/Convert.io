@@ -1,325 +1,800 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Convert.io — traffic follows revenue</title>
-<meta name="description" content="Convert.io runs every version of your landing page at once and moves traffic toward whichever one actually makes money. No four week tests, no flicker, no waiting.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..700&family=Source+Serif+4:opsz,wght@8..60,300..600&display=swap" rel="stylesheet">
-<style>
-:root{
-  --paper:#EDEAE3; --paper-2:#E3DFD5; --ink:#1A1916; --ink-soft:#57534A;
-  --plum:#8B2C5F; --plum-soft:#C79AB0; --teal:#3F6F6A; --teal-soft:#A9C2BE;
-  --rule:#CDC7B9; --field:#F6F4EF;
-}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --paper:#141317; --paper-2:#1C1B20; --ink:#EDEAE3; --ink-soft:#A19B90;
-    --plum:#E8A0C2; --plum-soft:#6B2547; --teal:#8FC4BC; --teal-soft:#2C4B48;
-    --rule:#332F38; --field:#1C1B20;
-  }
-}
-:root[data-theme="dark"]{
-  --paper:#141317; --paper-2:#1C1B20; --ink:#EDEAE3; --ink-soft:#A19B90;
-  --plum:#E8A0C2; --plum-soft:#6B2547; --teal:#8FC4BC; --teal-soft:#2C4B48;
-  --rule:#332F38; --field:#1C1B20;
-}
-*{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{
-  margin:0;background:var(--paper);color:var(--ink);
-  font-family:"Source Serif 4",Georgia,serif;font-size:19px;line-height:1.65;
-  font-optical-sizing:auto;
-}
-h1,h2,h3,.arch{font-family:Archivo,"Helvetica Neue",Arial,sans-serif;font-optical-sizing:auto}
-a{color:inherit}
-:focus-visible{outline:2px solid var(--plum);outline-offset:3px}
-.wrap{max-width:1040px;margin:0 auto;padding:0 28px}
-.rule{border:0;border-top:1px solid var(--rule);margin:0}
-
-nav{display:flex;justify-content:space-between;align-items:baseline;padding:26px 0 22px}
-.mark{font-family:Archivo;font-variation-settings:"wdth" 118;font-weight:700;font-size:19px;letter-spacing:-.02em}
-.mark span{color:var(--plum)}
-nav a{font-family:Archivo;font-size:15px;text-decoration:none;color:var(--ink-soft)}
-nav a:hover{color:var(--ink)}
-
-.hero{padding:64px 0 72px;display:grid;grid-template-columns:1fr;gap:52px}
-@media(min-width:900px){.hero{grid-template-columns:1.02fr .98fr;gap:64px;align-items:center;padding:82px 0 96px}}
-h1{
-  font-variation-settings:"wdth" 112;font-weight:600;
-  font-size:clamp(40px,6.4vw,66px);line-height:1.02;letter-spacing:-.03em;margin:0 0 24px;
-}
-.lede{font-size:21px;line-height:1.55;color:var(--ink-soft);margin:0 0 30px;max-width:30em}
-
-.instrument{background:var(--paper-2);border:1px solid var(--rule);padding:24px 22px 20px}
-.inst-top{display:flex;justify-content:space-between;align-items:baseline;font-family:Archivo;font-size:13px;color:var(--ink-soft);margin-bottom:22px}
-.inst-top b{font-weight:500;color:var(--ink);font-variant-numeric:tabular-nums}
-.arm{margin-bottom:19px}
-.arm:last-of-type{margin-bottom:6px}
-.arm-h{display:flex;justify-content:space-between;align-items:baseline;font-family:Archivo;font-size:14px;margin-bottom:7px;gap:12px}
-.arm-h em{font-style:normal;color:var(--ink-soft);font-size:13px}
-.arm-name{font-weight:500}
-.track{height:12px;background:var(--rule);position:relative;overflow:hidden}
-.fill{position:absolute;inset:0 auto 0 0;background:var(--teal);width:33.3%;transition:width .9s cubic-bezier(.4,0,.2,1)}
-.arm.lead .fill{background:var(--plum)}
-.arm.lead .arm-name{color:var(--plum)}
-.pct{font-variation-settings:"wdth" 100;font-weight:500;font-variant-numeric:tabular-nums}
-.inst-foot{font-family:Archivo;font-size:12.5px;color:var(--ink-soft);border-top:1px solid var(--rule);padding-top:13px;margin-top:17px}
-
-.btn{
-  display:inline-block;font-family:Archivo;font-size:16px;font-weight:500;
-  background:var(--ink);color:var(--paper);text-decoration:none;
-  padding:14px 26px;border:1px solid var(--ink);cursor:pointer;
-}
-.btn:hover{background:transparent;color:var(--ink)}
-.btn-ghost{background:transparent;color:var(--ink)}
-.btn-ghost:hover{background:var(--ink);color:var(--paper)}
-
-section{padding:74px 0}
-h2{font-variation-settings:"wdth" 108;font-weight:600;font-size:clamp(28px,3.6vw,38px);line-height:1.1;letter-spacing:-.022em;margin:0 0 20px;max-width:18em}
-.sub{color:var(--ink-soft);max-width:34em;margin:0 0 40px}
-
-.compare{display:grid;gap:28px}
-@media(min-width:760px){.compare{grid-template-columns:1fr 1fr;gap:44px}}
-.pane h3{font-size:17px;font-weight:600;font-variation-settings:"wdth" 105;margin:0 0 4px}
-.pane p{font-size:17px;color:var(--ink-soft);margin:0 0 18px}
-.weeks{display:flex;gap:4px;align-items:flex-end;height:64px}
-.wk{flex:1;background:var(--rule)}
-.wk.dead{background:var(--rule)}
-.wk.live{background:var(--teal)}
-.wk.win{background:var(--plum)}
-.wk-lbl{font-family:Archivo;font-size:12.5px;color:var(--ink-soft);margin-top:9px}
-
-ol.steps{list-style:none;counter-reset:s;padding:0;margin:0;display:grid;gap:0}
-ol.steps li{counter-increment:s;padding:26px 0;border-top:1px solid var(--rule);display:grid;grid-template-columns:38px 1fr;gap:20px;align-items:start}
-@media(min-width:760px){ol.steps li{grid-template-columns:52px 15em 1fr;gap:28px}}
-ol.steps li::before{content:counter(s);font-family:Archivo;font-weight:500;font-size:14px;color:var(--plum);padding-top:4px;font-variant-numeric:tabular-nums}
-ol.steps h3{font-family:Archivo;font-size:18px;font-weight:500;font-variation-settings:"wdth" 104;margin:0}
-ol.steps p{margin:6px 0 0;color:var(--ink-soft);font-size:17.5px;grid-column:2/-1}
-@media(min-width:760px){ol.steps p{grid-column:3/4;margin:0}}
-
-.audit{background:var(--paper-2);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
-.finding{border-left:3px solid var(--plum);padding:2px 0 2px 20px;margin:0 0 26px;max-width:40em}
-.finding .lbl{font-family:Archivo;font-size:12.5px;color:var(--ink-soft);display:block;margin-bottom:3px}
-.finding p{margin:0 0 12px;font-size:17.5px}
-.finding p:last-child{margin-bottom:0}
-.meter{font-family:Archivo;font-size:13px;color:var(--plum);letter-spacing:.08em}
-
-form.cta{display:flex;flex-wrap:wrap;gap:10px;margin:32px 0 12px;max-width:34em}
-input[type=url],input[type=email]{
-  flex:1 1 15em;font-family:Archivo;font-size:16px;padding:13px 15px;
-  background:var(--field);color:var(--ink);border:1px solid var(--rule);
-}
-input::placeholder{color:var(--ink-soft)}
-.fineprint{font-family:Archivo;font-size:13.5px;color:var(--ink-soft);margin:0}
-.err{font-family:Archivo;font-size:13.5px;color:var(--plum);margin:6px 0 0;min-height:1.2em}
-.sent{font-family:Archivo;font-size:16px;color:var(--teal);margin:14px 0 0}
-
-footer{padding:40px 0 56px;font-family:Archivo;font-size:14px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px}
-@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
-</style>
-</head>
-<body>
-
-<div class="wrap">
-  <nav>
-    <div class="mark">Convert<span>.</span>io</div>
-    <a href="#audit">Free page review</a>
-  </nav>
-</div>
-<hr class="rule">
-
-<div class="wrap">
-<header class="hero">
-  <div>
-    <h1>Your traffic should follow the money, not the calendar.</h1>
-    <p class="lede">Convert.io runs every version of your landing page at the same time and shifts visitors toward whichever one is actually producing revenue. Losing versions stop getting traffic within hours, not after a month of waiting for significance.</p>
-    <a class="btn" href="#audit">Get your page reviewed</a>
-  </div>
-
-  <div class="instrument" id="inst" aria-label="Live demonstration of traffic allocation shifting between three page versions">
-    <div class="inst-top">
-      <span>Allocation, last 6 hours</span>
-      <span><b id="conv">0</b> orders</span>
-    </div>
-
-    <div class="arm" id="a0">
-      <div class="arm-h"><span class="arm-name">Set up in 60 seconds</span><em><span class="rev">$0</span> · <span class="pct">33%</span></em></div>
-      <div class="track"><div class="fill"></div></div>
-    </div>
-    <div class="arm" id="a1">
-      <div class="arm-h"><span class="arm-name">Everything in one bag</span><em><span class="rev">$0</span> · <span class="pct">33%</span></em></div>
-      <div class="track"><div class="fill"></div></div>
-    </div>
-    <div class="arm" id="a2">
-      <div class="arm-h"><span class="arm-name">Your current page</span><em><span class="rev">$0</span> · <span class="pct">33%</span></em></div>
-      <div class="track"><div class="fill"></div></div>
-    </div>
-
-    <p class="inst-foot" id="foot">Warming up. All three versions start even.</p>
-  </div>
-</header>
-</div>
-
-<hr class="rule">
-
-<div class="wrap">
-<section>
-  <h2>An A/B test spends most of its life sending people to the wrong page.</h2>
-  <p class="sub">Split testing holds allocation at fifty fifty until the test ends. Every visitor who lands on the losing version during those weeks is a visitor you paid for and wasted.</p>
-
-  <div class="compare">
-    <div class="pane">
-      <h3>A four week split test</h3>
-      <p>Half your traffic goes to the weaker page for the entire run, then you read the result and change it once.</p>
-      <div class="weeks" role="img" aria-label="Four weeks of even allocation, then a single change at the end">
-        <div class="wk dead" style="height:50%"></div><div class="wk dead" style="height:50%"></div>
-        <div class="wk dead" style="height:50%"></div><div class="wk dead" style="height:50%"></div>
-        <div class="wk win" style="height:100%"></div>
-      </div>
-      <p class="wk-lbl">Weeks 1 to 4 even · decision on week 5</p>
-    </div>
-    <div class="pane">
-      <h3>Continuous allocation</h3>
-      <p>Allocation updates every few minutes against revenue. The weaker page keeps a small share so the system can still notice if it was wrong.</p>
-      <div class="weeks" role="img" aria-label="Allocation rising steadily toward the better page from the first days">
-        <div class="wk live" style="height:52%"></div><div class="wk live" style="height:64%"></div>
-        <div class="wk live" style="height:78%"></div><div class="wk win" style="height:88%"></div>
-        <div class="wk win" style="height:96%"></div>
-      </div>
-      <p class="wk-lbl">Shifting from day one · never fully closed</p>
-    </div>
-  </div>
-</section>
-</div>
-
-<hr class="rule">
-
-<div class="wrap">
-<section>
-  <h2>How it runs</h2>
-  <p class="sub">Four things happen in order. The first one is the one most tools skip, and skipping it is why their results never tie back to money.</p>
-
-  <ol class="steps">
-    <li>
-      <h3>Measurement first</h3>
-      <p>Before a single word changes, orders and leads are wired back to the version that produced them, server side, so iOS and ad blockers do not eat the signal. Your existing page is registered as the control and stays in rotation permanently.</p>
-    </li>
-    <li>
-      <h3>Versions per angle</h3>
-      <p>Each ad angle gets a page that finishes the sentence the ad started. An ad about saving time lands on a page about saving time, not on your homepage.</p>
-    </li>
-    <li>
-      <h3>Rendered before it arrives</h3>
-      <p>The version is chosen and rendered at the edge, so the visitor receives finished HTML. Nothing swaps after load, nothing flickers, and your page speed score goes up rather than down.</p>
-    </li>
-    <li>
-      <h3>Revenue decides</h3>
-      <p>Allocation follows revenue per visitor, not clicks. A version that gets clicks and no orders loses traffic, which is exactly the outcome click optimization gets backwards.</p>
-    </li>
-  </ol>
-</section>
-</div>
-
-<section class="audit" id="audit">
-<div class="wrap">
-  <h2>Start with a review of the page you already have.</h2>
-  <p class="sub">Send a URL and get back a ranked read of what is costing you conversions, with the exact copy to change and a plan that puts measurement in before anything ships. No call required to receive it.</p>
-
-  <div class="finding">
-    <span class="lbl">Sample finding</span>
-    <p class="meter">▉▉▉▉▉▉▉░░░ impact 71/100 · message · effort S</p>
-    <p><strong>Now:</strong> the headline reads "The next generation of outdoor equipment."</p>
-    <p><strong>Why it costs you:</strong> a visitor arriving from a paid ad has about three seconds to decide the page is about their problem. The line names a category, not an outcome, so the burden of working it out falls on them.</p>
-    <p><strong>Change to:</strong> "Set up your whole campsite in under 60 seconds."</p>
-    <p><strong>Expected:</strong> lower bounce from paid traffic, higher engagement with the primary action.</p>
-  </div>
-
-  <form class="cta" id="f" novalidate>
-    <input type="url" id="u" placeholder="https://yourstore.com" aria-label="Your landing page URL" required>
-    <input type="email" id="e" placeholder="you@company.com" aria-label="Your email" required>
-    <button class="btn" type="submit">Send the review</button>
-  </form>
-  <p class="err" id="err" role="alert"></p>
-  <p class="fineprint">One page, one review, turned around within two business days.</p>
-  <p class="sent" id="sent" hidden></p>
-</div>
-</section>
-
-<div class="wrap">
-<section>
-  <h2>Personalization that does not cost you the page speed you paid for.</h2>
-  <p class="sub">Most testing tools load a script, wait, then rewrite the page in the visitor's browser. That is the flash of the original content you have seen on other sites, and it moves your largest paint later on every single visit. Convert.io decides at the edge and sends finished HTML, so the personalized version is the version that loads, and search engines see a real page instead of an empty shell.</p>
-  <a class="btn btn-ghost" href="#audit">Get your page reviewed</a>
-</section>
-</div>
-
-<hr class="rule">
-<div class="wrap">
-<footer>
-  <span>Convert.io</span>
-  <span>Allocation follows revenue.</span>
-</footer>
-</div>
-
-<script>
-(function(){
-  var arms=[{el:document.getElementById("a0"),p:0.041,rev:0,w:1,a:1,b:1},
-            {el:document.getElementById("a1"),p:0.022,rev:0,w:1,a:1,b:1},
-            {el:document.getElementById("a2"),p:0.028,rev:0,w:1,a:1,b:1}];
-  var conv=document.getElementById("conv"),foot=document.getElementById("foot");
-  var total=0,ticks=0;
-  var reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  function gamma(k){var s=0;for(var i=0;i<k;i++)s-=Math.log(Math.random()||1e-9);return s;}
-  function sample(a,b){var x=gamma(Math.max(1,Math.round(a))),y=gamma(Math.max(1,Math.round(b)));return x/(x+y);}
-
-  function paint(){
-    var s=arms.map(function(m){return sample(m.a,m.b);});
-    var sum=s.reduce(function(x,y){return x+y;},0);
-    var best=0;s.forEach(function(v,i){if(v>s[best])best=i;});
-    arms.forEach(function(m,i){
-      var share=Math.max(0.08,s[i]/sum);
-      m.el.querySelector(".fill").style.width=(share*100).toFixed(0)+"%";
-      m.el.querySelector(".pct").textContent=(share*100).toFixed(0)+"%";
-      m.el.querySelector(".rev").textContent="$"+m.rev.toLocaleString();
-      m.el.classList.toggle("lead",i===best);
-    });
-    conv.textContent=total;
-    if(ticks>3)foot.textContent="Traffic is moving toward the version earning the most per visitor. Nothing drops below 8 percent, so a reversal is still detectable.";
-  }
-
-  function tick(){
-    ticks++;
-    arms.forEach(function(m){
-      var visits=6+Math.floor(Math.random()*7);
-      for(var i=0;i<visits;i++){
-        if(Math.random()<m.p){m.a++;m.rev+=40+Math.floor(Math.random()*50);total++;}
-        else m.b++;
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Convert.io — traffic follows revenue</title>
+    <meta
+      name="description"
+      content="Convert.io runs every version of your landing page at once and moves traffic toward whichever one actually makes money. No four week tests, no flicker, no waiting."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..700&family=Source+Serif+4:opsz,wght@8..60,300..600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --paper: #edeae3;
+        --paper-2: #e3dfd5;
+        --ink: #1a1916;
+        --ink-soft: #57534a;
+        --plum: #8b2c5f;
+        --plum-soft: #c79ab0;
+        --teal: #3f6f6a;
+        --teal-soft: #a9c2be;
+        --rule: #cdc7b9;
+        --field: #f6f4ef;
       }
-    });
-    paint();
-  }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --paper: #141317;
+          --paper-2: #1c1b20;
+          --ink: #edeae3;
+          --ink-soft: #a19b90;
+          --plum: #e8a0c2;
+          --plum-soft: #6b2547;
+          --teal: #8fc4bc;
+          --teal-soft: #2c4b48;
+          --rule: #332f38;
+          --field: #1c1b20;
+        }
+      }
+      :root[data-theme="dark"] {
+        --paper: #141317;
+        --paper-2: #1c1b20;
+        --ink: #edeae3;
+        --ink-soft: #a19b90;
+        --plum: #e8a0c2;
+        --plum-soft: #6b2547;
+        --teal: #8fc4bc;
+        --teal-soft: #2c4b48;
+        --rule: #332f38;
+        --field: #1c1b20;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        -webkit-text-size-adjust: 100%;
+      }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: "Source Serif 4", Georgia, serif;
+        font-size: 19px;
+        line-height: 1.65;
+        font-optical-sizing: auto;
+      }
+      h1,
+      h2,
+      h3,
+      .arch {
+        font-family: Archivo, "Helvetica Neue", Arial, sans-serif;
+        font-optical-sizing: auto;
+      }
+      a {
+        color: inherit;
+      }
+      :focus-visible {
+        outline: 2px solid var(--plum);
+        outline-offset: 3px;
+      }
+      .wrap {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 0 28px;
+      }
+      .rule {
+        border: 0;
+        border-top: 1px solid var(--rule);
+        margin: 0;
+      }
 
-  paint();
-  if(reduce){for(var i=0;i<14;i++)tick();}
-  else{var n=0,id=setInterval(function(){tick();if(++n>26)clearInterval(id);},1100);}
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        padding: 26px 0 22px;
+      }
+      .mark {
+        font-family: Archivo;
+        font-variation-settings: "wdth" 118;
+        font-weight: 700;
+        font-size: 19px;
+        letter-spacing: -0.02em;
+      }
+      .mark span {
+        color: var(--plum);
+      }
+      nav a {
+        font-family: Archivo;
+        font-size: 15px;
+        text-decoration: none;
+        color: var(--ink-soft);
+      }
+      nav a:hover {
+        color: var(--ink);
+      }
 
-  document.getElementById("f").addEventListener("submit",function(ev){
-    ev.preventDefault();
-    var u=document.getElementById("u"),e=document.getElementById("e"),err=document.getElementById("err");
-    if(!u.value.trim()){err.textContent="Enter the page you want reviewed.";u.focus();return;}
-    if(!/^https?:\/\/.+\..+/.test(u.value.trim())){err.textContent="That does not look like a full URL. Include https://";u.focus();return;}
-    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e.value.trim())){err.textContent="Enter an email we can send the review to.";e.focus();return;}
-    err.textContent="";
-    document.getElementById("f").hidden=true;
-    var s=document.getElementById("sent");
-    s.hidden=false;s.textContent="Queued. The review for "+u.value.trim()+" goes to "+e.value.trim()+" within two business days.";
-  });
-  ["u","e"].forEach(function(id){document.getElementById(id).addEventListener("input",function(){document.getElementById("err").textContent="";});});
-})();
-</script>
-</body>
+      .hero {
+        padding: 64px 0 72px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 52px;
+      }
+      @media (min-width: 900px) {
+        .hero {
+          grid-template-columns: 1.02fr 0.98fr;
+          gap: 64px;
+          align-items: center;
+          padding: 82px 0 96px;
+        }
+      }
+      h1 {
+        font-variation-settings: "wdth" 112;
+        font-weight: 600;
+        font-size: clamp(40px, 6.4vw, 66px);
+        line-height: 1.02;
+        letter-spacing: -0.03em;
+        margin: 0 0 24px;
+      }
+      .lede {
+        font-size: 21px;
+        line-height: 1.55;
+        color: var(--ink-soft);
+        margin: 0 0 30px;
+        max-width: 30em;
+      }
+
+      .instrument {
+        background: var(--paper-2);
+        border: 1px solid var(--rule);
+        padding: 24px 22px 20px;
+      }
+      .inst-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        font-family: Archivo;
+        font-size: 13px;
+        color: var(--ink-soft);
+        margin-bottom: 22px;
+      }
+      .inst-top b {
+        font-weight: 500;
+        color: var(--ink);
+        font-variant-numeric: tabular-nums;
+      }
+      .arm {
+        margin-bottom: 19px;
+      }
+      .arm:last-of-type {
+        margin-bottom: 6px;
+      }
+      .arm-h {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        font-family: Archivo;
+        font-size: 14px;
+        margin-bottom: 7px;
+        gap: 12px;
+      }
+      .arm-h em {
+        font-style: normal;
+        color: var(--ink-soft);
+        font-size: 13px;
+      }
+      .arm-name {
+        font-weight: 500;
+      }
+      .track {
+        height: 12px;
+        background: var(--rule);
+        position: relative;
+        overflow: hidden;
+      }
+      .fill {
+        position: absolute;
+        inset: 0 auto 0 0;
+        background: var(--teal);
+        width: 33.3%;
+        transition: width 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .arm.lead .fill {
+        background: var(--plum);
+      }
+      .arm.lead .arm-name {
+        color: var(--plum);
+      }
+      .pct {
+        font-variation-settings: "wdth" 100;
+        font-weight: 500;
+        font-variant-numeric: tabular-nums;
+      }
+      .inst-foot {
+        font-family: Archivo;
+        font-size: 12.5px;
+        color: var(--ink-soft);
+        border-top: 1px solid var(--rule);
+        padding-top: 13px;
+        margin-top: 17px;
+      }
+
+      .btn {
+        display: inline-block;
+        font-family: Archivo;
+        font-size: 16px;
+        font-weight: 500;
+        background: var(--ink);
+        color: var(--paper);
+        text-decoration: none;
+        padding: 14px 26px;
+        border: 1px solid var(--ink);
+        cursor: pointer;
+      }
+      .btn:hover {
+        background: transparent;
+        color: var(--ink);
+      }
+      .btn-ghost {
+        background: transparent;
+        color: var(--ink);
+      }
+      .btn-ghost:hover {
+        background: var(--ink);
+        color: var(--paper);
+      }
+
+      section {
+        padding: 74px 0;
+      }
+      h2 {
+        font-variation-settings: "wdth" 108;
+        font-weight: 600;
+        font-size: clamp(28px, 3.6vw, 38px);
+        line-height: 1.1;
+        letter-spacing: -0.022em;
+        margin: 0 0 20px;
+        max-width: 18em;
+      }
+      .sub {
+        color: var(--ink-soft);
+        max-width: 34em;
+        margin: 0 0 40px;
+      }
+
+      .compare {
+        display: grid;
+        gap: 28px;
+      }
+      @media (min-width: 760px) {
+        .compare {
+          grid-template-columns: 1fr 1fr;
+          gap: 44px;
+        }
+      }
+      .pane h3 {
+        font-size: 17px;
+        font-weight: 600;
+        font-variation-settings: "wdth" 105;
+        margin: 0 0 4px;
+      }
+      .pane p {
+        font-size: 17px;
+        color: var(--ink-soft);
+        margin: 0 0 18px;
+      }
+      .weeks {
+        display: flex;
+        gap: 4px;
+        align-items: flex-end;
+        height: 64px;
+      }
+      .wk {
+        flex: 1;
+        background: var(--rule);
+      }
+      .wk.dead {
+        background: var(--rule);
+      }
+      .wk.live {
+        background: var(--teal);
+      }
+      .wk.win {
+        background: var(--plum);
+      }
+      .wk-lbl {
+        font-family: Archivo;
+        font-size: 12.5px;
+        color: var(--ink-soft);
+        margin-top: 9px;
+      }
+
+      ol.steps {
+        list-style: none;
+        counter-reset: s;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 0;
+      }
+      ol.steps li {
+        counter-increment: s;
+        padding: 26px 0;
+        border-top: 1px solid var(--rule);
+        display: grid;
+        grid-template-columns: 38px 1fr;
+        gap: 20px;
+        align-items: start;
+      }
+      @media (min-width: 760px) {
+        ol.steps li {
+          grid-template-columns: 52px 15em 1fr;
+          gap: 28px;
+        }
+      }
+      ol.steps li::before {
+        content: counter(s);
+        font-family: Archivo;
+        font-weight: 500;
+        font-size: 14px;
+        color: var(--plum);
+        padding-top: 4px;
+        font-variant-numeric: tabular-nums;
+      }
+      ol.steps h3 {
+        font-family: Archivo;
+        font-size: 18px;
+        font-weight: 500;
+        font-variation-settings: "wdth" 104;
+        margin: 0;
+      }
+      ol.steps p {
+        margin: 6px 0 0;
+        color: var(--ink-soft);
+        font-size: 17.5px;
+        grid-column: 2/-1;
+      }
+      @media (min-width: 760px) {
+        ol.steps p {
+          grid-column: 3/4;
+          margin: 0;
+        }
+      }
+
+      .audit {
+        background: var(--paper-2);
+        border-top: 1px solid var(--rule);
+        border-bottom: 1px solid var(--rule);
+      }
+      .finding {
+        border-left: 3px solid var(--plum);
+        padding: 2px 0 2px 20px;
+        margin: 0 0 26px;
+        max-width: 40em;
+      }
+      .finding .lbl {
+        font-family: Archivo;
+        font-size: 12.5px;
+        color: var(--ink-soft);
+        display: block;
+        margin-bottom: 3px;
+      }
+      .finding p {
+        margin: 0 0 12px;
+        font-size: 17.5px;
+      }
+      .finding p:last-child {
+        margin-bottom: 0;
+      }
+      .meter {
+        font-family: Archivo;
+        font-size: 13px;
+        color: var(--plum);
+        letter-spacing: 0.08em;
+      }
+
+      form.cta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 32px 0 12px;
+        max-width: 34em;
+      }
+      input[type="url"],
+      input[type="email"] {
+        flex: 1 1 15em;
+        font-family: Archivo;
+        font-size: 16px;
+        padding: 13px 15px;
+        background: var(--field);
+        color: var(--ink);
+        border: 1px solid var(--rule);
+      }
+      input::placeholder {
+        color: var(--ink-soft);
+      }
+      .fineprint {
+        font-family: Archivo;
+        font-size: 13.5px;
+        color: var(--ink-soft);
+        margin: 0;
+      }
+      .err {
+        font-family: Archivo;
+        font-size: 13.5px;
+        color: var(--plum);
+        margin: 6px 0 0;
+        min-height: 1.2em;
+      }
+      .sent {
+        font-family: Archivo;
+        font-size: 16px;
+        color: var(--teal);
+        margin: 14px 0 0;
+      }
+
+      footer {
+        padding: 40px 0 56px;
+        font-family: Archivo;
+        font-size: 14px;
+        color: var(--ink-soft);
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+          animation: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <nav>
+        <div class="mark">Convert<span>.</span>io</div>
+        <a href="#audit">Free page review</a>
+      </nav>
+    </div>
+    <hr class="rule" />
+
+    <div class="wrap">
+      <header class="hero">
+        <div>
+          <h1>Your traffic should follow the money, not the calendar.</h1>
+          <p class="lede">
+            Convert.io runs every version of your landing page at the same time and shifts visitors
+            toward whichever one is actually producing revenue. Losing versions stop getting traffic
+            within hours, not after a month of waiting for significance.
+          </p>
+          <a class="btn" href="#audit">Get your page reviewed</a>
+        </div>
+
+        <div
+          class="instrument"
+          id="inst"
+          aria-label="Live demonstration of traffic allocation shifting between three page versions"
+        >
+          <div class="inst-top">
+            <span>Allocation, last 6 hours</span>
+            <span><b id="conv">0</b> orders</span>
+          </div>
+
+          <div class="arm" id="a0">
+            <div class="arm-h">
+              <span class="arm-name">Set up in 60 seconds</span
+              ><em><span class="rev">$0</span> · <span class="pct">33%</span></em>
+            </div>
+            <div class="track"><div class="fill"></div></div>
+          </div>
+          <div class="arm" id="a1">
+            <div class="arm-h">
+              <span class="arm-name">Everything in one bag</span
+              ><em><span class="rev">$0</span> · <span class="pct">33%</span></em>
+            </div>
+            <div class="track"><div class="fill"></div></div>
+          </div>
+          <div class="arm" id="a2">
+            <div class="arm-h">
+              <span class="arm-name">Your current page</span
+              ><em><span class="rev">$0</span> · <span class="pct">33%</span></em>
+            </div>
+            <div class="track"><div class="fill"></div></div>
+          </div>
+
+          <p class="inst-foot" id="foot">Warming up. All three versions start even.</p>
+        </div>
+      </header>
+    </div>
+
+    <hr class="rule" />
+
+    <div class="wrap">
+      <section>
+        <h2>An A/B test spends most of its life sending people to the wrong page.</h2>
+        <p class="sub">
+          Split testing holds allocation at fifty fifty until the test ends. Every visitor who lands
+          on the losing version during those weeks is a visitor you paid for and wasted.
+        </p>
+
+        <div class="compare">
+          <div class="pane">
+            <h3>A four week split test</h3>
+            <p>
+              Half your traffic goes to the weaker page for the entire run, then you read the result
+              and change it once.
+            </p>
+            <div
+              class="weeks"
+              role="img"
+              aria-label="Four weeks of even allocation, then a single change at the end"
+            >
+              <div class="wk dead" style="height: 50%"></div>
+              <div class="wk dead" style="height: 50%"></div>
+              <div class="wk dead" style="height: 50%"></div>
+              <div class="wk dead" style="height: 50%"></div>
+              <div class="wk win" style="height: 100%"></div>
+            </div>
+            <p class="wk-lbl">Weeks 1 to 4 even · decision on week 5</p>
+          </div>
+          <div class="pane">
+            <h3>Continuous allocation</h3>
+            <p>
+              Allocation updates every few minutes against revenue. The weaker page keeps a small
+              share so the system can still notice if it was wrong.
+            </p>
+            <div
+              class="weeks"
+              role="img"
+              aria-label="Allocation rising steadily toward the better page from the first days"
+            >
+              <div class="wk live" style="height: 52%"></div>
+              <div class="wk live" style="height: 64%"></div>
+              <div class="wk live" style="height: 78%"></div>
+              <div class="wk win" style="height: 88%"></div>
+              <div class="wk win" style="height: 96%"></div>
+            </div>
+            <p class="wk-lbl">Shifting from day one · never fully closed</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <hr class="rule" />
+
+    <div class="wrap">
+      <section>
+        <h2>How it runs</h2>
+        <p class="sub">
+          Four things happen in order. The first one is the one most tools skip, and skipping it is
+          why their results never tie back to money.
+        </p>
+
+        <ol class="steps">
+          <li>
+            <h3>Measurement first</h3>
+            <p>
+              Before a single word changes, orders and leads are wired back to the version that
+              produced them, server side, so iOS and ad blockers do not eat the signal. Your
+              existing page is registered as the control and stays in rotation permanently.
+            </p>
+          </li>
+          <li>
+            <h3>Versions per angle</h3>
+            <p>
+              Each ad angle gets a page that finishes the sentence the ad started. An ad about
+              saving time lands on a page about saving time, not on your homepage.
+            </p>
+          </li>
+          <li>
+            <h3>Rendered before it arrives</h3>
+            <p>
+              The version is chosen and rendered at the edge, so the visitor receives finished HTML.
+              Nothing swaps after load, nothing flickers, and your page speed score goes up rather
+              than down.
+            </p>
+          </li>
+          <li>
+            <h3>Revenue decides</h3>
+            <p>
+              Allocation follows revenue per visitor, not clicks. A version that gets clicks and no
+              orders loses traffic, which is exactly the outcome click optimization gets backwards.
+            </p>
+          </li>
+        </ol>
+      </section>
+    </div>
+
+    <section class="audit" id="audit">
+      <div class="wrap">
+        <h2>Start with a review of the page you already have.</h2>
+        <p class="sub">
+          Send a URL and get back a ranked read of what is costing you conversions, with the exact
+          copy to change and a plan that puts measurement in before anything ships. No call required
+          to receive it.
+        </p>
+
+        <div class="finding">
+          <span class="lbl">Sample finding</span>
+          <p class="meter">▉▉▉▉▉▉▉░░░ impact 71/100 · message · effort S</p>
+          <p>
+            <strong>Now:</strong> the headline reads "The next generation of outdoor equipment."
+          </p>
+          <p>
+            <strong>Why it costs you:</strong> a visitor arriving from a paid ad has about three
+            seconds to decide the page is about their problem. The line names a category, not an
+            outcome, so the burden of working it out falls on them.
+          </p>
+          <p><strong>Change to:</strong> "Set up your whole campsite in under 60 seconds."</p>
+          <p>
+            <strong>Expected:</strong> lower bounce from paid traffic, higher engagement with the
+            primary action.
+          </p>
+        </div>
+
+        <form class="cta" id="f" novalidate>
+          <input
+            type="url"
+            id="u"
+            placeholder="https://yourstore.com"
+            aria-label="Your landing page URL"
+            required
+          />
+          <input
+            type="email"
+            id="e"
+            placeholder="you@company.com"
+            aria-label="Your email"
+            required
+          />
+          <button class="btn" type="submit">Send the review</button>
+        </form>
+        <p class="err" id="err" role="alert"></p>
+        <p class="fineprint">One page, one review, turned around within two business days.</p>
+        <p class="sent" id="sent" hidden></p>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <section>
+        <h2>Personalization that does not cost you the page speed you paid for.</h2>
+        <p class="sub">
+          Most testing tools load a script, wait, then rewrite the page in the visitor's browser.
+          That is the flash of the original content you have seen on other sites, and it moves your
+          largest paint later on every single visit. Convert.io decides at the edge and sends
+          finished HTML, so the personalized version is the version that loads, and search engines
+          see a real page instead of an empty shell.
+        </p>
+        <a class="btn btn-ghost" href="#audit">Get your page reviewed</a>
+      </section>
+    </div>
+
+    <hr class="rule" />
+    <div class="wrap">
+      <footer>
+        <span>Convert.io</span>
+        <span>Allocation follows revenue.</span>
+      </footer>
+    </div>
+
+    <script>
+      (function () {
+        var arms = [
+          { el: document.getElementById("a0"), p: 0.041, rev: 0, w: 1, a: 1, b: 1 },
+          { el: document.getElementById("a1"), p: 0.022, rev: 0, w: 1, a: 1, b: 1 },
+          { el: document.getElementById("a2"), p: 0.028, rev: 0, w: 1, a: 1, b: 1 },
+        ];
+        var conv = document.getElementById("conv"),
+          foot = document.getElementById("foot");
+        var total = 0,
+          ticks = 0;
+        var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        function gamma(k) {
+          var s = 0;
+          for (var i = 0; i < k; i++) s -= Math.log(Math.random() || 1e-9);
+          return s;
+        }
+        function sample(a, b) {
+          var x = gamma(Math.max(1, Math.round(a))),
+            y = gamma(Math.max(1, Math.round(b)));
+          return x / (x + y);
+        }
+
+        function paint() {
+          var s = arms.map(function (m) {
+            return sample(m.a, m.b);
+          });
+          var sum = s.reduce(function (x, y) {
+            return x + y;
+          }, 0);
+          var best = 0;
+          s.forEach(function (v, i) {
+            if (v > s[best]) best = i;
+          });
+          arms.forEach(function (m, i) {
+            var share = Math.max(0.08, s[i] / sum);
+            m.el.querySelector(".fill").style.width = (share * 100).toFixed(0) + "%";
+            m.el.querySelector(".pct").textContent = (share * 100).toFixed(0) + "%";
+            m.el.querySelector(".rev").textContent = "$" + m.rev.toLocaleString();
+            m.el.classList.toggle("lead", i === best);
+          });
+          conv.textContent = total;
+          if (ticks > 3)
+            foot.textContent =
+              "Traffic is moving toward the version earning the most per visitor. Nothing drops below 8 percent, so a reversal is still detectable.";
+        }
+
+        function tick() {
+          ticks++;
+          arms.forEach(function (m) {
+            var visits = 6 + Math.floor(Math.random() * 7);
+            for (var i = 0; i < visits; i++) {
+              if (Math.random() < m.p) {
+                m.a++;
+                m.rev += 40 + Math.floor(Math.random() * 50);
+                total++;
+              } else m.b++;
+            }
+          });
+          paint();
+        }
+
+        paint();
+        if (reduce) {
+          for (var i = 0; i < 14; i++) tick();
+        } else {
+          var n = 0,
+            id = setInterval(function () {
+              tick();
+              if (++n > 26) clearInterval(id);
+            }, 1100);
+        }
+
+        document.getElementById("f").addEventListener("submit", function (ev) {
+          ev.preventDefault();
+          var u = document.getElementById("u"),
+            e = document.getElementById("e"),
+            err = document.getElementById("err");
+          if (!u.value.trim()) {
+            err.textContent = "Enter the page you want reviewed.";
+            u.focus();
+            return;
+          }
+          if (!/^https?:\/\/.+\..+/.test(u.value.trim())) {
+            err.textContent = "That does not look like a full URL. Include https://";
+            u.focus();
+            return;
+          }
+          if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e.value.trim())) {
+            err.textContent = "Enter an email we can send the review to.";
+            e.focus();
+            return;
+          }
+          err.textContent = "";
+          document.getElementById("f").hidden = true;
+          var s = document.getElementById("sent");
+          s.hidden = false;
+          s.textContent =
+            "Queued. The review for " +
+            u.value.trim() +
+            " goes to " +
+            e.value.trim() +
+            " within two business days.";
+        });
+        ["u", "e"].forEach(function (id) {
+          document.getElementById(id).addEventListener("input", function () {
+            document.getElementById("err").textContent = "";
+          });
+        });
+      })();
+    </script>
+  </body>
 </html>
