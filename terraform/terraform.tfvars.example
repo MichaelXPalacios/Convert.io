@@ -1,0 +1,37 @@
+# Copy to terraform.tfvars and fill in. terraform.tfvars is gitignored and must
+# stay that way; every value below is a credential or points at one.
+#
+# In CI, set these as TF_VAR_* environment variables instead of writing a file.
+
+# --- Providers -------------------------------------------------------------
+vercel_api_token = ""
+# vercel_team_id = "team_xxxxxxxx"   # omit entirely for a personal account
+
+upstash_email   = ""
+upstash_api_key = ""
+
+# --- Project ---------------------------------------------------------------
+project_name = "convertio"
+github_repo  = "MichaelXPalacios/Convert.io"
+# production_domain = "convert.io"
+
+# --- Application -----------------------------------------------------------
+# The POOLED Neon string, the one containing "-pooler.". Take it from
+# `neon connection-string production`. The unpooled string is for migrations
+# and the seed and is deliberately never deployed.
+database_url = ""
+
+# At least 32 characters. Vercel Cron presents this to /api/cron/worker as a
+# bearer token, and it is the only thing in front of that route.
+# Generate with: openssl rand -hex 32
+cron_secret = ""
+
+# Empty disables the provider rather than trusting an unverifiable signature.
+shopify_webhook_secret = ""
+stripe_webhook_secret  = ""
+
+# Optional. The forwarder no-ops when unset.
+meta_pixel_id          = ""
+meta_capi_access_token = ""
+
+admin_allowed_emails = ""
