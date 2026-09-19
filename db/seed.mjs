@@ -12,7 +12,7 @@
 //
 // It refuses to touch a production branch unless you say --force, because demo
 // traffic in a real experiment is not a mistake you can undo with a DELETE:
-// the posteriors computed from it have already been read by the edge.
+// the posteriors computed from it have already been read by the request path.
 
 import pg from "pg";
 
@@ -35,7 +35,7 @@ const branch = process.env.NEON_BRANCH ?? "unknown";
 if (/^(production|prod|main)$/i.test(branch) && !FORCE) {
   console.error(
     `Refusing to seed branch "${branch}".\n\n` +
-      "Seed data becomes exposures and posteriors that the edge will read and act on,\n" +
+      "Seed data becomes exposures and posteriors that the request path will read and act on,\n" +
       "and deleting the rows afterwards does not undo the allocations they produced.\n" +
       "Point NEON_BRANCH at a development branch, or pass --force if you are certain.",
   );
