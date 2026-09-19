@@ -44,7 +44,12 @@ jobs:
               exit 1
             fi
           done
-          if git grep -I -n -E 'postgres(ql)?://[^:@/]+:[^@/]+@' -- . ':!.env.example'; then
+          # A connection string pointing at localhost is not a credential —
+          # the integration job's service container is reachable by nobody —
+          # so those are exempt. Anything addressing a real host is not.
+          if git grep -I -n -E 'postgres(ql)?://[^:@/]+:[^@/]+@' -- . ':!.env.example' \
+               | grep -vE '@(localhost|127\.0\.0\.1)([:/]|$)' \
+               | grep .; then
             echo "::error::a Postgres URL with an inline password is committed"
             exit 1
           fi
@@ -91,3 +96,61 @@ jobs:
             exit 1
           fi
           echo "No existing migration was modified."
+
+  # The worker's unit tests drive a fake database. They prove the arithmetic
+  # and cannot prove the SQL — column names, the events -> exposures join, and
+  # node-postgres returning numeric and bigint as strings are all invisible to
+  # them. This runs the real recompute against a real Postgres with traffic
+  # whose answer is known in advance.
+  #
+  # A service container rather than a Neon branch, deliberately: it needs no
+  # credentials, so it runs on every pull request including one from a fork,
+  # and it cannot write to anything that outlives the job.
+  integration:
+    name: worker against real postgres
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    env:
+      DATABASE_URL_UNPOOLED: postgres://postgres:postgres@localhost:5432/postgres
+      # Anything but production/prod/main; the seed refuses those without
+      # --force, and that refusal is itself worth not bypassing in CI.
+      NEON_BRANCH: ci
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm -r --if-present build
+
+      - name: Apply migrations
+        run: node db/migrate.mjs
+
+      - name: Seed
+        run: node db/seed.mjs
+
+      - name: Recompute against real Postgres
+        run: node .github/scripts/worker-integration.mjs
