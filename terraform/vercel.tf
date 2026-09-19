@@ -88,11 +88,20 @@ locals {
 }
 
 resource "vercel_project_environment_variable" "app" {
-  for_each = local.env
+  # Iterate over the NAMES, not the map. Every value here is sensitive, which
+  # makes the map sensitive, and Terraform refuses a sensitive for_each
+  # because instance keys appear in plan output and state addresses — a
+  # resource literally named after a secret would leak it.
+  #
+  # The names are not secret: DATABASE_URL and CRON_SECRET are in
+  # .env.example, in this file, and in the README. So stripping the sensitive
+  # marker from the key set is safe, and it is the narrowest place to strip
+  # it — the values are still sensitive when looked up below.
+  for_each = nonsensitive(toset(keys(local.env)))
 
   project_id = vercel_project.app.id
   key        = each.key
-  value      = each.value
+  value      = local.env[each.key]
   target     = ["production"]
   sensitive  = true
 }
