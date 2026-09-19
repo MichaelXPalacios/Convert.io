@@ -12,7 +12,7 @@ import {
   parseCookieHeader,
   resolveIdentity,
   serializeCookie,
-} from "../lib/identity.js";
+} from "../src/identity.js";
 
 /** A counter, so a test can assert exactly which ids were minted. */
 function sequentialIds(prefix = "id"): () => string {

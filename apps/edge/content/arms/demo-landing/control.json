@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "key": "control",
+  "meta": {
+    "title": "Convert.io — find what your landing page is losing",
+    "description": "We audit your landing page, generate variants, and let a bandit decide which one earns the most revenue per visitor."
+  },
+  "hero": {
+    "headline": "Find out what your landing page is costing you",
+    "lede": "We audit the page, propose variants, and measure them against revenue per visitor rather than clicks.",
+    "cta": { "label": "Run a free audit", "href": "#audit", "style": "solid" }
+  },
+  "sections": [
+    {
+      "kind": "steps",
+      "heading": "How it works",
+      "steps": [
+        {
+          "title": "Audit",
+          "body": "Deterministic checks first, judgment second. Every finding cites the evidence it came from."
+        },
+        {
+          "title": "Propose",
+          "body": "Each finding becomes a variant you approve before a single visitor sees it."
+        },
+        {
+          "title": "Measure",
+          "body": "A bandit sends traffic toward what earns, and keeps measuring the rest."
+        }
+      ]
+    },
+    {
+      "kind": "prose",
+      "heading": "Clicks are not the thing you sell",
+      "body": [
+        "A headline that lifts clicks and drops orders is a loss the usual dashboard reports as a win.",
+        "Every arm here is scored on revenue per visitor. A visitor who never ordered counts as a zero, which is what moves a high-click, low-order page down."
+      ]
+    },
+    {
+      "kind": "form",
+      "heading": "Audit your page",
+      "sub": "One URL. The report comes back with findings ranked by impact per effort.",
+      "fields": [
+        {
+          "name": "url",
+          "type": "url",
+          "label": "Landing page URL",
+          "placeholder": "https://",
+          "required": true
+        },
+        {
+          "name": "email",
+          "type": "email",
+          "label": "Where to send it",
+          "placeholder": "you@company.com",
+          "required": true
+        }
+      ],
+      "submitLabel": "Send me the audit",
+      "fineprint": "No account required."
+    }
+  ],
+  "footer": { "brand": "Convert.io", "tagline": "Measured against revenue, not clicks." }
+}

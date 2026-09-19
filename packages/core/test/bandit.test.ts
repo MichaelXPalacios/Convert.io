@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { mulberry32, sampleBeta, sampleGamma, sampleNormal } from "../lib/bandit.js";
+import { mulberry32, sampleBeta, sampleGamma, sampleNormal } from "../src/bandit.js";
 
 describe("mulberry32", () => {
   it("is deterministic for a given seed", () => {

@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "key": "variant-b",
+  "meta": {
+    "title": "Convert.io — one page, one audit, one number",
+    "description": "Paste a URL. Get the ranked list of what the page is losing you, with the evidence behind every finding."
+  },
+  "hero": {
+    "headline": "Paste a URL. See what the page is losing.",
+    "lede": "One audit, ranked by impact per effort, with the evidence behind every finding.",
+    "cta": { "label": "Audit my page", "href": "#audit", "style": "solid" }
+  },
+  "sections": [
+    {
+      "kind": "form",
+      "heading": "Audit my page",
+      "sub": "That is the whole form.",
+      "fields": [
+        {
+          "name": "url",
+          "type": "url",
+          "label": "Landing page URL",
+          "placeholder": "https://",
+          "required": true
+        }
+      ],
+      "submitLabel": "Run the audit",
+      "fineprint": "No account, no card, no call."
+    },
+    {
+      "kind": "prose",
+      "heading": "What comes back",
+      "body": [
+        "A ranked list of findings, each citing the thing on the page that produced it.",
+        "An implementation plan ordered by impact per effort, measurement first.",
+        "Nothing in it is true until an arm proves it, and the report says so."
+      ]
+    }
+  ],
+  "footer": { "brand": "Convert.io", "tagline": "Measured against revenue, not clicks." }
+}

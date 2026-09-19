@@ -7,10 +7,10 @@ import {
   REDIS_MIRROR_SCHEMA_VERSION,
 } from "@convertio/contracts";
 import type { MirrorArm, PosteriorMirror } from "@convertio/contracts";
-import { mulberry32 } from "../lib/bandit.js";
-import type { MirrorStore } from "../lib/mirror.js";
-import { selectForRequest, trackRequestBody } from "../lib/select.js";
-import type { AssignedSelection, HeaderBearing } from "../lib/select.js";
+import { mulberry32 } from "../src/bandit.js";
+import type { MirrorStore } from "../src/mirror.js";
+import { selectForRequest, trackRequestBody } from "../src/select.js";
+import type { AssignedSelection, HeaderBearing } from "../src/select.js";
 
 const EXPERIMENT_ID = "00000000-0000-4000-8000-000000000001";
 const armId = (n: number) => `00000000-0000-4000-8000-00000000010${n}`;

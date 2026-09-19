@@ -1,0 +1,290 @@
+/*
+ * One stylesheet, shipped with the deployment.
+ *
+ * Deliberately plain: every arm is scored against every other, so a visual
+ * difference that is not part of the variant under test is a confound. The
+ * variants differ in what they say and how the page is ordered, not in how
+ * they are styled.
+ */
+
+:root {
+  --ink: #16181d;
+  --ink-soft: #545a66;
+  --rule: #e3e6ec;
+  --page: #ffffff;
+  --accent: #1f4ed8;
+  --accent-ink: #ffffff;
+  --muted-bar: #d3d8e2;
+  --live-bar: #f0a63a;
+  --win-bar: #2f9e63;
+  --measure: 68ch;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #eef1f6;
+    --ink-soft: #a4acbb;
+    --rule: #2b303a;
+    --page: #14161a;
+    --accent: #7ba3ff;
+    --accent-ink: #10131a;
+    --muted-bar: #39404d;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink);
+  font:
+    16px/1.6 ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+main {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 0 20px 72px;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  margin: 0 0 12px;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 2.9rem);
+}
+h2 {
+  font-size: 1.45rem;
+}
+h3 {
+  font-size: 1.05rem;
+}
+
+p {
+  margin: 0 0 14px;
+}
+
+.hero {
+  padding: 72px 0 40px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.lede {
+  font-size: 1.15rem;
+  color: var(--ink-soft);
+  max-width: 54ch;
+}
+
+.hero img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-top: 28px;
+  border-radius: 10px;
+}
+
+.section {
+  padding: 40px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.sub {
+  color: var(--ink-soft);
+  margin-top: -4px;
+}
+
+.cta {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.cta--solid {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.cta--ghost {
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+
+.steps {
+  list-style: none;
+  counter-reset: step;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 18px;
+}
+
+.steps li {
+  counter-increment: step;
+  padding-left: 44px;
+  position: relative;
+}
+
+.steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--rule);
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.panes {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.pane {
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 18px;
+}
+
+.bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  height: 96px;
+  margin: 14px 0 10px;
+}
+
+.bar {
+  flex: 1;
+  border-radius: 4px 4px 0 0;
+  background: var(--muted-bar);
+  min-height: 4px;
+}
+
+.bar--live {
+  background: var(--live-bar);
+}
+.bar--win {
+  background: var(--win-bar);
+}
+
+.caption,
+.fineprint {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.finding {
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 18px;
+}
+
+.finding header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.tag {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.tag--muted {
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+}
+
+.score {
+  margin-left: auto;
+  font-weight: 600;
+}
+
+.finding dl {
+  margin: 0;
+}
+
+.finding dt {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  margin-top: 12px;
+}
+
+.finding dd {
+  margin: 4px 0 0;
+}
+
+.form {
+  display: grid;
+  gap: 14px;
+  max-width: 420px;
+}
+
+.form label {
+  display: grid;
+  gap: 6px;
+  font-size: 0.9rem;
+}
+
+.form input {
+  padding: 11px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: var(--page);
+  color: var(--ink);
+  font: inherit;
+}
+
+.form button {
+  padding: 12px 20px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: baseline;
+  padding-top: 32px;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}

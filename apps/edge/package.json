@@ -4,16 +4,23 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "tsc -b",
-    "typecheck": "tsc -b",
-    "test": "tsc -b && node --test \"dist/test/**/*.test.js\"",
-    "clean": "rm -rf dist *.tsbuildinfo"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf .next *.tsbuildinfo"
   },
   "dependencies": {
-    "@convertio/contracts": "workspace:*"
+    "@convertio/contracts": "workspace:*",
+    "@convertio/core": "workspace:*",
+    "next": "^16.3.5",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "typescript": "^5.7.2"
   }
 }

@@ -58,7 +58,7 @@ export const SESSION_COOKIE_MAX_AGE_SECONDS = 30 * 60;
 
 /**
  * Guardrails. These are the floor values the system enforces regardless of what
- * any configuration says. `lib/assign.ts` applies EXPLORATION_FLOOR whether or
+ * any configuration says. `@convertio/core`'s assign.ts applies EXPLORATION_FLOOR whether or
  * not a caller passes one, because a guardrail a caller can omit is not a
  * guardrail.
  */
