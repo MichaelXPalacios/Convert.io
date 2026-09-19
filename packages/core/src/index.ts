@@ -22,3 +22,4 @@ export * from "./exposure.js";
 export * from "./event.js";
 export * from "./webhook.js";
 export * from "./attribution.js";
+export * from "./gateway.js";

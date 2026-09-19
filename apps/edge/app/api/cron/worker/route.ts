@@ -23,10 +23,9 @@
  * copy is allowed to lag but never to lead.
  */
 
-import { createHash, timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 import pg from "pg";
-import { mulberry32, sampleBeta } from "@convertio/core";
+import { authorizeCron, mulberry32, sampleBeta } from "@convertio/core";
 import { mirrorPublisherFromEnv, recomputeAll } from "@convertio/worker";
 import type { QueryFn, QueryResultLike } from "@convertio/worker";
 
@@ -40,41 +39,21 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 /**
- * Constant time, and length-safe.
+ * Who may run this is decided in @convertio/core, not here.
  *
- * `timingSafeEqual` throws on a length mismatch, which would itself leak the
- * secret's length through the error path, so the comparison is done over
- * fixed-width digests of both sides instead of the raw bytes.
+ * A Next route cannot be imported outside Next's bundler, so a check written
+ * inline in this file cannot be unit tested -- and this is the check standing
+ * in front of a route that rewrites every posterior in the system.
  */
-function secretMatches(presented: string, expected: string): boolean {
-  const a = createHash("sha256").update(presented).digest();
-  const b = createHash("sha256").update(expected).digest();
-  return timingSafeEqual(a, b);
-}
-
-function authorize(request: Request): NextResponse | undefined {
-  const expected = process.env.CRON_SECRET;
-
-  // An unset secret must not mean "open". This is the only thing standing in
-  // front of a route that rewrites every posterior in the system.
-  if (expected === undefined || expected === "") {
-    console.error("[cv] CRON_SECRET is unset; refusing to run the recompute");
-    return NextResponse.json({ error: "cron is not configured" }, { status: 503 });
-  }
-
-  const header = request.headers.get("authorization") ?? "";
-  const presented = header.startsWith("Bearer ") ? header.slice("Bearer ".length) : "";
-
-  if (presented === "" || !secretMatches(presented, expected)) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  }
-
-  return undefined;
-}
 
 export async function GET(request: Request): Promise<NextResponse> {
-  const denied = authorize(request);
-  if (denied !== undefined) return denied;
+  const allowed = authorizeCron(request.headers.get("authorization"), process.env.CRON_SECRET);
+  if (!allowed.ok) {
+    if (allowed.status === 503) {
+      console.error("[cv] CRON_SECRET is unset; refusing to run the recompute");
+    }
+    return NextResponse.json({ error: allowed.error }, { status: allowed.status });
+  }
 
   const connectionString = process.env.DATABASE_URL;
   if (connectionString === undefined || connectionString === "") {
