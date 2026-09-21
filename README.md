@@ -17,7 +17,7 @@ reaches a posterior.
 | `apps/edge`          | The request path — variant assignment and visitor identity.       |
 | `db/`                | Forward-only migrations and the development seed.                 |
 | `terraform/`         | Vercel project and the Upstash database.                          |
-| `Convert/`           | The standalone audit engine that proposes variants.               |
+| `packages/audit`     | Reads a landing page and proposes variants worth testing.         |
 
 `packages/contracts` is the interface freeze. Several people and agents build
 against it in parallel, so a shape that needs changing is escalated rather than

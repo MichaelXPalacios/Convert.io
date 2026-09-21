@@ -17,7 +17,8 @@
     "next": "^16.3.5",
     "pg": "^8.13.1",
     "react": "^19.3.0",
-    "react-dom": "^19.3.0"
+    "react-dom": "^19.3.0",
+    "@convertio/audit": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",

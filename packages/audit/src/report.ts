@@ -142,6 +142,21 @@ const effortWeight = (e: Finding["effort"]) => (e === "S" ? 1 : e === "M" ? 2 : 
 export function outreachEmail(facts: PageFacts, a: Analysis): string {
   const host = new URL(facts.url).hostname;
   const top = a.findings[0];
+
+  // An analysis with no findings is a legitimate outcome \u2014 the page may be
+  // fine \u2014 and there is no outreach to write about it. Saying so is better
+  // than an email with a hole where the finding should be.
+  if (top === undefined) {
+    return `Subject: ${host} \u2014 conversion review, nothing material found
+
+Hi,
+
+I ran a conversion review on ${host} and found nothing material enough to be
+worth changing. ${a.biggestLeak}
+
+Happy to look again if the page changes.`;
+  }
+
   return `Subject: ${host} \u2014 ${top.title.toLowerCase()}
 
 Hi,

@@ -91,7 +91,7 @@ Return JSON:
 Return between 5 and 9 findings, sorted by impactScore descending.`;
 
   const res = await client.messages.create({
-    model: "claude-sonnet-4-6",
+    model: "claude-opus-5",
     max_tokens: 6000,
     system: SYSTEM,
     messages: [{ role: "user", content: prompt }],

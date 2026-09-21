@@ -61,8 +61,11 @@ async function main() {
     process.stderr.write(
       `\nwrote ${dir}/\n  review.md\n  implementation-plan.md\n  outreach.txt\n  raw.json\n\n`,
     );
+    const top = analysis.findings[0];
     process.stderr.write(
-      `top finding: ${analysis.findings[0].title} (${analysis.findings[0].impactScore}/100)\n`,
+      top === undefined
+        ? "no findings: the page had nothing material worth changing\n"
+        : `top finding: ${top.title} (${top.impactScore}/100)\n`,
     );
   }
 }

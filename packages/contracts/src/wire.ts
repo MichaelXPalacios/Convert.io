@@ -161,3 +161,67 @@ export type OrderWebhookResponse = z.infer<typeof OrderWebhookResponseSchema>;
 
 /** The note_attributes / metadata key carrying the visitor id through checkout. */
 export const ORDER_VISITOR_ATTRIBUTE = "cv_vid";
+
+// ---------------------------------------------------------------------------
+// POST /api/audit — read a landing page and propose variants
+//
+// The auditor takes a URL from the caller and makes the server fetch it, so
+// this boundary is also a security boundary. What the server will and will not
+// fetch is enforced in @convertio/audit, not here; this shape only describes
+// what crosses the wire.
+//
+// Nothing here is persisted. A finding becomes a `proposals` row only when it
+// is attached to an experiment, and an audit takes a URL rather than a slug,
+// so there is nothing to attach to yet.
+// ---------------------------------------------------------------------------
+
+export const AuditRequestSchema = z.object({
+  url: z.string().min(1).max(2048),
+  /** Business context from the operator. The model is told it may be empty. */
+  context: z.string().max(4000).optional(),
+});
+
+export const AuditAreaSchema = z.enum([
+  "message",
+  "conversion path",
+  "trust",
+  "performance",
+  "targeting",
+]);
+
+export const AuditFindingSchema = z.object({
+  id: z.string().min(1),
+  area: AuditAreaSchema,
+  title: z.string().min(1),
+  /** What the page says now: a quote or a short description. */
+  current: z.string(),
+  problem: z.string(),
+  suggested: z.string(),
+  hypothesis: z.string(),
+  expectedEffect: z.string(),
+  confidence: z.enum(["high", "medium", "low"]),
+  effort: z.enum(["S", "M", "L"]),
+  /** 0-100, reach x effect x confidence. Maps to proposals.impact_score. */
+  impactScore: z.number().int().min(0).max(100),
+  /**
+   * False when the change is an engineering or offer decision rather than
+   * something a landing page variant could express. An unarmable finding is
+   * still worth reporting; it just cannot become an arm.
+   */
+  armable: z.boolean(),
+});
+
+export const AuditResponseSchema = z.object({
+  /** The URL actually audited, after redirects — not necessarily the one sent. */
+  url: z.string(),
+  /** True when the page exceeded the byte cap and was read only in part. */
+  truncated: z.boolean(),
+  summary: z.string(),
+  audienceRead: z.string(),
+  biggestLeak: z.string(),
+  findings: z.array(AuditFindingSchema),
+});
+
+export type AuditRequest = z.infer<typeof AuditRequestSchema>;
+export type AuditFinding = z.infer<typeof AuditFindingSchema>;
+export type AuditResponse = z.infer<typeof AuditResponseSchema>;
